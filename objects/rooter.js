@@ -2,6 +2,8 @@ const fileReader = require('./file_reader.js');
 const fileWriter = require('./file_writer.js');
 const Brain = require('./tensorflow.js');
 
+let de = require('../roots/de.js');
+
 var brain = new Brain();
 
 class Rooter {
@@ -10,6 +12,27 @@ class Rooter {
 			this.data = JSON.parse(result).init_data_train;
 			console.log("> file readed");
 		});
+	}
+	de(e) {
+		var output_array = de.generate(e);
+		var output = "";
+		output_array.forEach((cell) => {
+			output += `${cell} - `;
+		});
+		e.channel.send(output.substring(0, output.length - 2));
+		/*fileReader.read('./../_resources/data.json', (err, data) => {
+			if (err)
+				throw(err);
+			var json = JSON.parse(data);
+			output_array.forEach((cell) => {
+				json.init_data_train[0][json.init_data_train.length + 1] = parseInt(cell);
+				json.init_data_train[1][json.init_data_train.length + 1] = parseInt(String(e.content).split(' ')[2]);				
+			});
+			fileWriter('./../_resources/data.json', JSON.stringify(json), (err) => {
+				if (err)
+					throw(err);
+			});
+		});*/
 	}
 	init(e) {
 		console.log(`|- command: ${e.content}`)

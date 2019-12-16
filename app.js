@@ -28,7 +28,11 @@ client.on('message', (e) => {
 			var message_splitted = String(e.content).split(' ');
 			var command = message_splitted[0].substring(1, message_splitted[0].length);
 
-			rooter[command](e);
+			try {
+				rooter[command](e);
+			} catch (exception) {
+				console.log(exception);
+			}
 		} catch (exception) {
 			e.channel.send(exception);
 		}

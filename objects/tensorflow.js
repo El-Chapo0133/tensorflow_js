@@ -36,8 +36,8 @@ class Brain {
 		this.brain.compile(compile);
 	}
 	async train(input_data) {
-		var xs = tensorflow.tensor1d(input_data[0]);
-		var ys = tensorflow.tensor1d(input_data[1]);
+		var xs = tensorflow.tensor1d(input_data[1]);
+		var ys = tensorflow.tensor1d(input_data[0]);
 
 		await this.brain.fit(xs, ys);
 	}
@@ -54,7 +54,7 @@ class Brain {
 	}
 	print_weight() {
 		var output = "";
-		var weight = this.brain.weight;
+		var weight = this.brain.weights;
 		weight.forEach((layer) => {
 			output += `${layer.name}: ${layer.shape}\n`;
 		});

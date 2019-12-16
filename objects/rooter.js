@@ -14,12 +14,13 @@ class Rooter {
 		});
 	}
 	de(e) {
+		console.log(`|- command: ${e.content}`)
 		var output_array = de.generate(e);
 		var output = "";
 		output_array.forEach((cell) => {
 			output += `${cell} - `;
 		});
-		e.channel.send(output.substring(0, output.length - 2));
+		e.channel.send("> " + output.substring(0, output.length - 2));
 		/*fileReader.read('./../_resources/data.json', (err, data) => {
 			if (err)
 				throw(err);

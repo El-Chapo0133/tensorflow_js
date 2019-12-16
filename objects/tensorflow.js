@@ -8,7 +8,8 @@
 const tensorflow = require("@tensorflow/tfjs");
 const compile_default = {
 	loss: 'meanSquaredError',
-	optimizer: 'sgd'
+	optimizer: 'sgd',
+	activation: 'tanh'
 };
 const layer_default = {
 	units: 1,
@@ -48,6 +49,14 @@ class Brain {
 		var output = "";
 		tensors.forEach((tensor) => {
 			output += `${tensor.id} ${tensor.name}[${tensor.dtype}]: ${tensor.batchInputShape}\n`;
+		});
+		return output;
+	}
+	print_weight() {
+		var output = "";
+		var weight = this.brain.weight;
+		weight.forEach((layer) => {
+			output += `${layer.name}: ${layer.shape}\n`;
 		});
 		return output;
 	}

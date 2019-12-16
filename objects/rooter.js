@@ -36,6 +36,10 @@ class Rooter {
 		var tensors = brain.print_tensors();
 		e.channel.send(tensors.toString());
 	}
+	print_weight(e) {
+		var weight = brain.print_weight();
+		e.channel.send("```" + weight + "```");
+	}
 }
 
 function init_brain() {

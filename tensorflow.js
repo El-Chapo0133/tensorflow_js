@@ -39,6 +39,7 @@ const default_data = {
 class Brain {
 	constructor() {
 		this.model = null;
+		this.bufferLayer = null;
 		this.isCompiled = false;
 		this.fits = [];
 		//require('@tensorflow-tfjs-node');
@@ -59,17 +60,20 @@ class Brain {
 			throw(exception);
 		}
 	}
-	addLayer(layer_config) {
-		const treated_layer = applyInputOptions(default_layer_options, layer_config);
-		try {
-			this.model.add(tensorflow.layers.dense(treated_layer));
-		} catch(exception) {
-			console.log({
-				title: 'Error on addLayer function',
-				exception: exception,
-			});
-			throw(exception);
-		}
+	addLayer(layer_configs) {
+		[...layer_configs].forEach(layer_config => {
+			const treated_layer = applyInputOptions(default_layer_options, layer_config);
+			try {
+				this.bufferLayer = tensorflow.layers.dense(treated_layer);
+				this.model.add(this.bufferLayer);
+			} catch(exception) {
+				console.log({
+					title: 'Error on addLayer function',
+					exception: exception,
+				});
+				throw(exception);
+			}
+		});
 	}
 	compile(options) {
 		const treated_options = applyInputOptions(default_compile_options, options);
@@ -145,12 +149,35 @@ class Brain {
 
 		return tensorflow.model({inputs: tf_input, outputs: buffer});
 	}
+	cloneLastLayer() {
+		if (this.bufferLayer === null)
+			return 0;
+		try {
+			this.model.add(this.bufferLayer);
+		} catch(exception) {
+			console.log({
+				title: 'Error on clone function | adding the bufferLayer',
+				exception: exception,
+			});
+			throw(exception);
+		}
+	}
+	createTensor(input) {
+		let buffer = 0;
+		while (typeof input[buffer] != Number) {
+			buffer++;
+		}
+		return tensorflow[`tensor${buffer + 1}d`](input);
+	}
 
 	getModel() {
 		return this.model;
 	}
 	getLayerInput() {
 		return JSON.stringify(this.model.outputs[0].shape);
+	}
+	getNumberLayers() {
+		return this.model.getLayer().length;
 	}
 	async save(file) {
 		const outputFile = file === "undefined" ? default_data.save_file : file;

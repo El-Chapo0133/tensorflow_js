@@ -15,12 +15,12 @@ class CMath {
 	}
 	max(array) {
 		const LENGTH = array.length - 1;
-		return array.sort()[LENGTH]
+		return [...array].sort(sortNumber)[LENGTH];
 	}
 	min(array) {
 		if (array.length === 0)
 			return 0;
-		return array.sort()[0];
+		return [...array].sort(sortNumber)[0];
 	}
 	median(array) {
 		const LENGTH = array.length;
@@ -35,7 +35,7 @@ class CMath {
 	}
 	scope(array) {
 		const LENGTH = array.length - 1;
-		const COPYARRAY = array.sort();
+		const COPYARRAY = [...array].sort(sortNumber);
 		return COPYARRAY[LENGTH] - COPYARRAY[0];
 	}
 	standardDeviation(array) {
@@ -49,12 +49,14 @@ class CMath {
 	}
 	Q1(array) {
 		const LENGTH = array.length;
-		return array[(LENGTH + 3) / 4];
+		return array[Math.floor((LENGTH + 3) / 4)];
 	}
 	Q3(array) {
 		const LENGTH = array.length;
-		return array[((3 * LENGTH) + 1) / 4]
+		return array[Math.floor(((3 * LENGTH) + 1) / 4)]
 	}
 }
+
+function sortNumber(a,b) { return a - b; }
 
 module.exports = new CMath();
